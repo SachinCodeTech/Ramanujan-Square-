@@ -7,6 +7,31 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
+const androidPackageName = "com.codetech.ramanujansquare";
+
+function getAssetLinksResponse(): Response {
+  const fingerprint = process.env["ANDROID_SHA256_CERT_FINGERPRINT"]?.trim();
+  const statements = fingerprint
+    ? [
+        {
+          relation: ["delegate_permission/common.handle_all_urls"],
+          target: {
+            namespace: "android_app",
+            package_name: androidPackageName,
+            sha256_cert_fingerprints: [fingerprint],
+          },
+        },
+      ]
+    : [];
+
+  return new Response(JSON.stringify(statements), {
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=300",
+    },
+  });
+}
+
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
@@ -40,6 +65,10 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      if (new URL(request.url).pathname === "/.well-known/assetlinks.json") {
+        return getAssetLinksResponse();
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
