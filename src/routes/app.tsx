@@ -5,22 +5,37 @@ export const Route = createFileRoute("/app")({
   head: () => ({
     meta: [
       { title: "Generate your Magic Square — Ramanujan Square" },
-      { name: "description", content: "Enter your name and birthday to generate a personal Ramanujan 4×4 magic square. Cycle through 21 hidden patterns and share as PDF." },
+      {
+        name: "description",
+        content:
+          "Enter your name and birthday to generate a personal Ramanujan 4×4 magic square. Cycle through 21 hidden patterns and share as PDF.",
+      },
       { property: "og:title", content: "Generate your Magic Square" },
-      { property: "og:description", content: "Personal Ramanujan magic square from your birthday." },
+      {
+        property: "og:description",
+        content: "Personal Ramanujan magic square from your birthday.",
+      },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://apptastic-boost.lovable.app/app" },
+      { property: "og:url", content: "https://ramanujansquare.lovable.app/app" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Generate your Magic Square" },
-      { name: "twitter:description", content: "Personal Ramanujan magic square from your birthday." },
+      {
+        name: "twitter:description",
+        content: "Personal Ramanujan magic square from your birthday.",
+      },
     ],
-    links: [{ rel: "canonical", href: "https://apptastic-boost.lovable.app/app" }],
+    links: [{ rel: "canonical", href: "https://ramanujansquare.lovable.app/app" }],
   }),
   component: AppPage,
 });
 
 function safeFileName(value: string) {
-  return (value || "Ramanujan").trim().replace(/[^a-z0-9_-]+/gi, "_").replace(/^_+|_+$/g, "") || "Ramanujan";
+  return (
+    (value || "Ramanujan")
+      .trim()
+      .replace(/[^a-z0-9_-]+/gi, "_")
+      .replace(/^_+|_+$/g, "") || "Ramanujan"
+  );
 }
 
 function drawRoundRect(
@@ -89,8 +104,22 @@ async function buildShareCardCanvas(opts: {
   ctx.fillStyle = "#14213d";
   ctx.fillText("Ramanujan Magic Square", 196, 144);
 
-  drawCenteredText(ctx, `${name || "Your"} Magic Square`, 540, 275, "500 58px Georgia, serif", "#14213d");
-  drawCenteredText(ctx, birthday || "dd-mm-yyyy", 540, 334, "500 28px Arial, sans-serif", "#64748b");
+  drawCenteredText(
+    ctx,
+    `${name || "Your"} Magic Square`,
+    540,
+    275,
+    "500 58px Georgia, serif",
+    "#14213d",
+  );
+  drawCenteredText(
+    ctx,
+    birthday || "dd-mm-yyyy",
+    540,
+    334,
+    "500 28px Arial, sans-serif",
+    "#64748b",
+  );
 
   const gridX = 190;
   const gridY = 386;
@@ -107,14 +136,35 @@ async function buildShareCardCanvas(opts: {
       ctx.strokeStyle = i === 0 ? "#f59e0b" : "#e2e8f0";
       ctx.lineWidth = 3;
       ctx.stroke();
-      drawCenteredText(ctx, String(square[i][j]), x + cell / 2, y + cell / 2, "600 54px Georgia, serif", "#0f172a");
+      drawCenteredText(
+        ctx,
+        String(square[i][j]),
+        x + cell / 2,
+        y + cell / 2,
+        "600 54px Georgia, serif",
+        "#0f172a",
+      );
     }
   }
 
   drawCenteredText(ctx, "BIRTHDAY TOTAL", 540, 1122, "700 23px Arial, sans-serif", "#64748b");
   drawCenteredText(ctx, String(total), 540, 1184, "700 68px Georgia, serif", "#1f3a8a");
-  drawCenteredText(ctx, "RAMANUJAN MAGIC SQUARE · CODETECH", 540, 1252, "700 19px Arial, sans-serif", "#94a3b8");
-  drawCenteredText(ctx, "Lead Developer: Sachin Sheth", 540, 1284, "500 17px Arial, sans-serif", "#64748b");
+  drawCenteredText(
+    ctx,
+    "RAMANUJAN MAGIC SQUARE · CODETECH",
+    540,
+    1252,
+    "700 19px Arial, sans-serif",
+    "#94a3b8",
+  );
+  drawCenteredText(
+    ctx,
+    "Lead Developer: Sachin Sheth",
+    540,
+    1284,
+    "500 17px Arial, sans-serif",
+    "#64748b",
+  );
 
   return canvas;
 }
@@ -175,8 +225,9 @@ function isEmbeddedWindow() {
 }
 
 function openOrDownloadBlob(blob: Blob, fileName: string) {
-  const isAppleMobile = /iPad|iPhone|iPod/.test(navigator.userAgent)
-    || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isAppleMobile =
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   // iOS ignores `download` for many Blob URLs. The Lovable preview is also an
   // iframe, where browsers block Web Share. Opening the generated card keeps a
@@ -196,10 +247,12 @@ function openOrDownloadBlob(blob: Blob, fileName: string) {
 }
 
 function getShareNavigator() {
-  return typeof navigator !== "undefined" ? (navigator as Navigator & {
-    canShare?: (data: ShareData) => boolean;
-    share?: (data: ShareData) => Promise<void>;
-  }) : null;
+  return typeof navigator !== "undefined"
+    ? (navigator as Navigator & {
+        canShare?: (data: ShareData) => boolean;
+        share?: (data: ShareData) => Promise<void>;
+      })
+    : null;
 }
 
 function canNativeShareFile(file: File) {
@@ -221,7 +274,12 @@ function canNativeShareFile(file: File) {
 function shareOrDownload(
   file: File,
   shareData: { title: string; text: string },
-  callbacks: { onShared: () => void; onCancelled: () => void; onDownloaded: () => void; onOpened: () => void },
+  callbacks: {
+    onShared: () => void;
+    onCancelled: () => void;
+    onDownloaded: () => void;
+    onOpened: () => void;
+  },
   nativeFallback?: { file: File; onShared: () => void },
 ) {
   const nav = getShareNavigator();
@@ -249,18 +307,20 @@ function shareOrDownload(
   // any file-generation promise first loses transient activation in Safari.
   try {
     const shareResult = nav.share({ ...shareData, files: [nativeFile] });
-    void shareResult.then(
-      nativeFile === file ? callbacks.onShared : nativeFallback?.onShared ?? callbacks.onShared,
-    ).catch((err: unknown) => {
-      const errorName = err instanceof DOMException ? err.name : (err as { name?: string })?.name;
-      if (errorName === "AbortError") {
-        callbacks.onCancelled();
-        return;
-      }
-      const result = openOrDownloadBlob(file, file.name);
-      if (result === "opened") callbacks.onOpened();
-      else callbacks.onDownloaded();
-    });
+    void shareResult
+      .then(
+        nativeFile === file ? callbacks.onShared : (nativeFallback?.onShared ?? callbacks.onShared),
+      )
+      .catch((err: unknown) => {
+        const errorName = err instanceof DOMException ? err.name : (err as { name?: string })?.name;
+        if (errorName === "AbortError") {
+          callbacks.onCancelled();
+          return;
+        }
+        const result = openOrDownloadBlob(file, file.name);
+        if (result === "opened") callbacks.onOpened();
+        else callbacks.onDownloaded();
+      });
   } catch {
     const result = openOrDownloadBlob(file, file.name);
     if (result === "opened") callbacks.onOpened();
@@ -279,18 +339,36 @@ async function createShareFiles(opts: {
   square: number[][];
   total: number;
 }): Promise<PreparedShareFiles> {
-  const [{ jsPDF }, canvas] = await Promise.all([
-    import("jspdf"),
-    buildShareCardCanvas(opts),
-  ]);
+  const [{ jsPDF }, canvas] = await Promise.all([import("jspdf"), buildShareCardCanvas(opts)]);
 
   const imageBlob = await canvasToPngBlob(canvas);
-  const image = makeShareFile([imageBlob], `${safeFileName(opts.name)}_MagicSquare.png`, "image/png");
+  const image = makeShareFile(
+    [imageBlob],
+    `${safeFileName(opts.name)}_MagicSquare.png`,
+    "image/png",
+  );
 
-  const pdf = new jsPDF({ orientation: "portrait", unit: "px", format: [canvas.width, canvas.height] });
-  pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, canvas.width, canvas.height, undefined, "FAST");
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "px",
+    format: [canvas.width, canvas.height],
+  });
+  pdf.addImage(
+    canvas.toDataURL("image/jpeg", 0.92),
+    "JPEG",
+    0,
+    0,
+    canvas.width,
+    canvas.height,
+    undefined,
+    "FAST",
+  );
   const pdfBlob: Blob = pdf.output("blob");
-  const pdfFile = makeShareFile([pdfBlob], `${safeFileName(opts.name)}_MagicSquare_${opts.birthday || "card"}.pdf`, "application/pdf");
+  const pdfFile = makeShareFile(
+    [pdfBlob],
+    `${safeFileName(opts.name)}_MagicSquare_${opts.birthday || "card"}.pdf`,
+    "application/pdf",
+  );
 
   return { image, pdf: pdfFile };
 }
@@ -298,27 +376,195 @@ async function createShareFiles(opts: {
 type Pattern = { type: string; cells: Array<[number, number]> };
 
 const validPatterns: Pattern[] = [
-  { type: "Sub-Square", cells: [[0,0],[0,1],[1,0],[1,1]] },
-  { type: "Sub-Square", cells: [[0,2],[0,3],[1,2],[1,3]] },
-  { type: "Sub-Square", cells: [[1,0],[1,1],[2,0],[2,1]] },
-  { type: "Sub-Square", cells: [[1,1],[1,2],[2,1],[2,2]] },
-  { type: "Sub-Square", cells: [[1,2],[1,3],[2,2],[2,3]] },
-  { type: "Sub-Square", cells: [[2,0],[2,1],[3,0],[3,1]] },
-  { type: "Sub-Square", cells: [[2,2],[2,3],[3,2],[3,3]] },
-  { type: "Diagonal", cells: [[0,0],[1,1],[2,2],[3,3]] },
-  { type: "Diagonal", cells: [[0,3],[1,2],[2,1],[3,0]] },
-  { type: "Row", cells: [[0,0],[0,1],[0,2],[0,3]] },
-  { type: "Row", cells: [[1,0],[1,1],[1,2],[1,3]] },
-  { type: "Row", cells: [[2,0],[2,1],[2,2],[2,3]] },
-  { type: "Row", cells: [[3,0],[3,1],[3,2],[3,3]] },
-  { type: "Column", cells: [[0,0],[1,0],[2,0],[3,0]] },
-  { type: "Column", cells: [[0,1],[1,1],[2,1],[3,1]] },
-  { type: "Column", cells: [[0,2],[1,2],[2,2],[3,2]] },
-  { type: "Column", cells: [[0,3],[1,3],[2,3],[3,3]] },
-  { type: "Corner", cells: [[0,0],[0,3],[3,0],[3,3]] },
-  { type: "Four-Square", cells: [[0,1],[0,2],[3,1],[3,2]] },
-  { type: "Four-Square", cells: [[0,1],[1,0],[2,3],[3,2]] },
-  { type: "Four-Square", cells: [[0,2],[1,3],[2,0],[3,1]] },
+  {
+    type: "Sub-Square",
+    cells: [
+      [0, 0],
+      [0, 1],
+      [1, 0],
+      [1, 1],
+    ],
+  },
+  {
+    type: "Sub-Square",
+    cells: [
+      [0, 2],
+      [0, 3],
+      [1, 2],
+      [1, 3],
+    ],
+  },
+  {
+    type: "Sub-Square",
+    cells: [
+      [1, 0],
+      [1, 1],
+      [2, 0],
+      [2, 1],
+    ],
+  },
+  {
+    type: "Sub-Square",
+    cells: [
+      [1, 1],
+      [1, 2],
+      [2, 1],
+      [2, 2],
+    ],
+  },
+  {
+    type: "Sub-Square",
+    cells: [
+      [1, 2],
+      [1, 3],
+      [2, 2],
+      [2, 3],
+    ],
+  },
+  {
+    type: "Sub-Square",
+    cells: [
+      [2, 0],
+      [2, 1],
+      [3, 0],
+      [3, 1],
+    ],
+  },
+  {
+    type: "Sub-Square",
+    cells: [
+      [2, 2],
+      [2, 3],
+      [3, 2],
+      [3, 3],
+    ],
+  },
+  {
+    type: "Diagonal",
+    cells: [
+      [0, 0],
+      [1, 1],
+      [2, 2],
+      [3, 3],
+    ],
+  },
+  {
+    type: "Diagonal",
+    cells: [
+      [0, 3],
+      [1, 2],
+      [2, 1],
+      [3, 0],
+    ],
+  },
+  {
+    type: "Row",
+    cells: [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+    ],
+  },
+  {
+    type: "Row",
+    cells: [
+      [1, 0],
+      [1, 1],
+      [1, 2],
+      [1, 3],
+    ],
+  },
+  {
+    type: "Row",
+    cells: [
+      [2, 0],
+      [2, 1],
+      [2, 2],
+      [2, 3],
+    ],
+  },
+  {
+    type: "Row",
+    cells: [
+      [3, 0],
+      [3, 1],
+      [3, 2],
+      [3, 3],
+    ],
+  },
+  {
+    type: "Column",
+    cells: [
+      [0, 0],
+      [1, 0],
+      [2, 0],
+      [3, 0],
+    ],
+  },
+  {
+    type: "Column",
+    cells: [
+      [0, 1],
+      [1, 1],
+      [2, 1],
+      [3, 1],
+    ],
+  },
+  {
+    type: "Column",
+    cells: [
+      [0, 2],
+      [1, 2],
+      [2, 2],
+      [3, 2],
+    ],
+  },
+  {
+    type: "Column",
+    cells: [
+      [0, 3],
+      [1, 3],
+      [2, 3],
+      [3, 3],
+    ],
+  },
+  {
+    type: "Corner",
+    cells: [
+      [0, 0],
+      [0, 3],
+      [3, 0],
+      [3, 3],
+    ],
+  },
+  {
+    type: "Four-Square",
+    cells: [
+      [0, 1],
+      [0, 2],
+      [3, 1],
+      [3, 2],
+    ],
+  },
+  {
+    type: "Four-Square",
+    cells: [
+      [0, 1],
+      [1, 0],
+      [2, 3],
+      [3, 2],
+    ],
+  },
+  {
+    type: "Four-Square",
+    cells: [
+      [0, 2],
+      [1, 3],
+      [2, 0],
+      [3, 1],
+    ],
+  },
 ];
 
 function AppPage() {
@@ -362,9 +608,17 @@ function AppPage() {
     stopCycling();
     setExportMessage("");
     const parts = birthday.split("-");
-    if (parts.length !== 3) { setError("Use format: dd-mm-yyyy"); return; }
-    const DD = parseInt(parts[0]), MM = parseInt(parts[1]), YYYY = parseInt(parts[2]);
-    if (!validateDate(DD, MM, YYYY)) { setError("Invalid date. Check day (1-31), month (1-12), year (1000-9999)."); return; }
+    if (parts.length !== 3) {
+      setError("Use format: dd-mm-yyyy");
+      return;
+    }
+    const DD = parseInt(parts[0]),
+      MM = parseInt(parts[1]),
+      YYYY = parseInt(parts[2]);
+    if (!validateDate(DD, MM, YYYY)) {
+      setError("Invalid date. Check day (1-31), month (1-12), year (1000-9999).");
+      return;
+    }
     setError("");
     const CC = Math.floor(YYYY / 100);
     const YY = YYYY % 100;
@@ -380,7 +634,9 @@ function AppPage() {
     setPatternLabel("");
     setHighlight(new Set());
     cycleIdx.current = 0;
-    const v = validPatterns.filter(p => p.cells.reduce((a, [x, y]) => a + (ms[x][y] || 0), 0) === t);
+    const v = validPatterns.filter(
+      (p) => p.cells.reduce((a, [x, y]) => a + (ms[x][y] || 0), 0) === t,
+    );
     setVerified(v);
     if (v.length === 0) setError("No valid patterns found.");
     setShowSuccess(true);
@@ -408,7 +664,12 @@ function AppPage() {
     setHighlight(new Set());
     setPatternLabel("");
   }
-  useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
+  useEffect(
+    () => () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!square || total === null) {
@@ -420,23 +681,33 @@ function AppPage() {
     let active = true;
     preparedFilesRef.current = null;
     setShareFilesReady(false);
-    void createShareFiles({ name, birthday, square, total }).then((files) => {
-      if (!active) return;
-      preparedFilesRef.current = files;
-      setShareFilesReady(true);
-    }).catch(() => {
-      if (!active) return;
-      preparedFilesRef.current = null;
-      setShareFilesReady(false);
-      setExportMessage("Could not prepare share cards. Please generate again.");
-    });
-    return () => { active = false; };
+    void createShareFiles({ name, birthday, square, total })
+      .then((files) => {
+        if (!active) return;
+        preparedFilesRef.current = files;
+        setShareFilesReady(true);
+      })
+      .catch(() => {
+        if (!active) return;
+        preparedFilesRef.current = null;
+        setShareFilesReady(false);
+        setExportMessage("Could not prepare share cards. Please generate again.");
+      });
+    return () => {
+      active = false;
+    };
   }, [name, birthday, square, total]);
 
   function clearAll() {
     stopCycling();
-    setName(""); setBirthday(""); setSquare(null); setTotal(null);
-    setVerified([]); setError(""); setPatternLabel(""); setExportMessage("");
+    setName("");
+    setBirthday("");
+    setSquare(null);
+    setTotal(null);
+    setVerified([]);
+    setError("");
+    setPatternLabel("");
+    setExportMessage("");
     setExportingKind(null);
     setShareFilesReady(false);
   }
@@ -461,18 +732,26 @@ function AppPage() {
           ? "PDF sharing is unavailable here. Opening the image share sheet instead…"
           : "Saving PDF card…",
     );
-    shareOrDownload(file, {
-      title: `${name || "My"} Magic Square`,
-      text: `My personal Ramanujan magic square — total ${total}. Made with Ramanujan Magic Square by CodeTech.`,
-    }, {
-      onShared: () => finishExport("PDF shared successfully."),
-      onCancelled: () => finishExport("PDF share cancelled."),
-      onDownloaded: () => finishExport("PDF saved. Open it from downloads to share."),
-      onOpened: () => finishExport("PDF card opened. Use the browser Share button to send it."),
-    }, {
-      file: image,
-      onShared: () => finishExport("PDF sharing is unavailable in this browser, so the image card was shared instead."),
-    });
+    shareOrDownload(
+      file,
+      {
+        title: `${name || "My"} Magic Square`,
+        text: `My personal Ramanujan magic square — total ${total}. Made with Ramanujan Magic Square by CodeTech.`,
+      },
+      {
+        onShared: () => finishExport("PDF shared successfully."),
+        onCancelled: () => finishExport("PDF share cancelled."),
+        onDownloaded: () => finishExport("PDF saved. Open it from downloads to share."),
+        onOpened: () => finishExport("PDF card opened. Use the browser Share button to send it."),
+      },
+      {
+        file: image,
+        onShared: () =>
+          finishExport(
+            "PDF sharing is unavailable in this browser, so the image card was shared instead.",
+          ),
+      },
+    );
   }
 
   function shareAsImage() {
@@ -480,16 +759,23 @@ function AppPage() {
     const file = preparedFilesRef.current.image;
     setIsExporting(true);
     setExportingKind("image");
-    setExportMessage(canNativeShareFile(file) ? "Opening image share sheet…" : "Saving image card…");
-    shareOrDownload(file, {
-      title: `${name || "My"} Magic Square`,
-      text: `My Ramanujan magic square — total ${total}.`,
-    }, {
-      onShared: () => finishExport("Image shared successfully."),
-      onCancelled: () => finishExport("Image share cancelled."),
-      onDownloaded: () => finishExport("Image saved. Open it from downloads to share."),
-      onOpened: () => finishExport("Image card opened. Use the browser Share button to send or save it."),
-    });
+    setExportMessage(
+      canNativeShareFile(file) ? "Opening image share sheet…" : "Saving image card…",
+    );
+    shareOrDownload(
+      file,
+      {
+        title: `${name || "My"} Magic Square`,
+        text: `My Ramanujan magic square — total ${total}.`,
+      },
+      {
+        onShared: () => finishExport("Image shared successfully."),
+        onCancelled: () => finishExport("Image share cancelled."),
+        onDownloaded: () => finishExport("Image saved. Open it from downloads to share."),
+        onOpened: () =>
+          finishExport("Image card opened. Use the browser Share button to send or save it."),
+      },
+    );
   }
 
   const hasSquare = !!square;
@@ -497,33 +783,41 @@ function AppPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-16">
       <div className="text-center">
-        <h1 className="font-display text-[2.45rem] leading-[1.05] sm:text-5xl">Generate your Magic Square</h1>
-        <p className="mx-auto mt-4 max-w-xl px-4 text-base leading-relaxed text-muted-foreground sm:text-base">Enter your details — everything runs locally in your browser.</p>
+        <h1 className="font-display text-[2.45rem] leading-[1.05] sm:text-5xl">
+          Generate your Magic Square
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl px-4 text-base leading-relaxed text-muted-foreground sm:text-base">
+          Enter your details — everything runs locally in your browser.
+        </p>
       </div>
 
       <div className="mt-8 grid gap-5 rounded-[1.75rem] border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:mt-10 sm:gap-6 sm:p-8">
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="block">
-            <span className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">Your Name</span>
+            <span className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+              Your Name
+            </span>
             <input
               type="text"
               autoComplete="name"
               enterKeyHint="next"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               maxLength={50}
               placeholder="e.g., Ramanujan"
               className="mt-2 h-14 w-full rounded-xl border border-input bg-field px-4 text-lg text-foreground outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/30"
             />
           </label>
           <label className="block">
-            <span className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">Birthday (dd-mm-yyyy)</span>
+            <span className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+              Birthday (dd-mm-yyyy)
+            </span>
             <input
               type="text"
               autoComplete="bday"
               enterKeyHint="done"
               value={birthday}
-              onChange={e => onBirthdayChange(e.target.value)}
+              onChange={(e) => onBirthdayChange(e.target.value)}
               maxLength={10}
               placeholder="22-12-1887"
               inputMode="numeric"
@@ -534,40 +828,60 @@ function AppPage() {
 
         {error && <p className="text-sm text-destructive">{error}</p>}
         {showSuccess && <p className="text-sm font-medium text-success">Magic Square Generated!</p>}
-        {exportMessage && <p className="text-sm font-medium text-muted-foreground">{exportMessage}</p>}
+        {exportMessage && (
+          <p className="text-sm font-medium text-muted-foreground">{exportMessage}</p>
+        )}
 
         <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
-          <button onClick={generate}
+          <button
+            onClick={generate}
             className="col-span-2 inline-flex h-14 items-center justify-center rounded-xl px-4 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] transition-transform hover:-translate-y-0.5 sm:col-span-1"
-            style={{ background: "var(--gradient-hero)" }}>
+            style={{ background: "var(--gradient-hero)" }}
+          >
             Generate
           </button>
-          <button onClick={() => isCycling ? stopCycling() : startCycling()} disabled={!hasSquare}
-            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary disabled:opacity-40 sm:px-4">
+          <button
+            onClick={() => (isCycling ? stopCycling() : startCycling())}
+            disabled={!hasSquare}
+            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary disabled:opacity-40 sm:px-4"
+          >
             {isCycling ? "Stop Cycling" : "Cycle Patterns"}
           </button>
-          <button onClick={shareAsPdf} disabled={!hasSquare || isExporting || !shareFilesReady}
+          <button
+            onClick={shareAsPdf}
+            disabled={!hasSquare || isExporting || !shareFilesReady}
             className="inline-flex min-h-14 items-center justify-center rounded-xl px-3 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40 sm:px-4"
-            style={{ background: "var(--gradient-accent)" }}>
+            style={{ background: "var(--gradient-accent)" }}
+          >
             {exportingKind === "pdf" ? "Preparing..." : "Share PDF"}
           </button>
-          <button onClick={shareAsImage} disabled={!hasSquare || isExporting || !shareFilesReady}
-            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary disabled:opacity-40 sm:px-4">
+          <button
+            onClick={shareAsImage}
+            disabled={!hasSquare || isExporting || !shareFilesReady}
+            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary disabled:opacity-40 sm:px-4"
+          >
             {exportingKind === "image" ? "Preparing..." : "Share Image"}
           </button>
-          <button onClick={clearAll}
-            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary sm:px-4">
+          <button
+            onClick={clearAll}
+            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary sm:px-4"
+          >
             Clear
           </button>
-          <button onClick={() => setShowInfo(true)}
-            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary sm:px-4">
+          <button
+            onClick={() => setShowInfo(true)}
+            className="inline-flex min-h-14 items-center justify-center rounded-xl border border-border bg-card px-3 text-sm font-medium hover:bg-secondary sm:px-4"
+          >
             Info
           </button>
         </div>
       </div>
 
       {/* The square (exportable region) */}
-      <div ref={exportRef} className="mt-8 overflow-hidden rounded-[1.75rem] border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:mt-8 sm:p-8">
+      <div
+        ref={exportRef}
+        className="mt-8 overflow-hidden rounded-[1.75rem] border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:mt-8 sm:p-8"
+      >
         <div className="text-center">
           <p className="font-display text-xl sm:text-2xl">{name || "Your"} Magic Square</p>
           <p className="text-xs text-muted-foreground sm:text-sm">{birthday || "dd-mm-yyyy"}</p>
@@ -583,51 +897,68 @@ function AppPage() {
                 <div
                   key={key}
                   className={
-                     "flex items-center justify-center rounded-xl font-display text-[1.35rem] transition-all duration-300 sm:text-2xl " +
+                    "flex items-center justify-center rounded-xl font-display text-[1.35rem] transition-all duration-300 sm:text-2xl " +
                     (isHi
-                       ? "scale-[1.02] text-square-highlight-foreground shadow-md"
+                      ? "scale-[1.02] text-square-highlight-foreground shadow-md"
                       : isFirstRow
-                      ? "text-foreground"
-                       : "bg-square-soft text-foreground")
+                        ? "text-foreground"
+                        : "bg-square-soft text-foreground")
                   }
                   style={
                     isHi
                       ? { background: "var(--gradient-accent)" }
-                       : isFirstRow
-                       ? { background: "var(--color-square-highlight)", border: "1px solid var(--color-accent)" }
-                      : undefined
+                      : isFirstRow
+                        ? {
+                            background: "var(--color-square-highlight)",
+                            border: "1px solid var(--color-accent)",
+                          }
+                        : undefined
                   }
                 >
                   {value ?? "–"}
                 </div>
               );
-            })
+            }),
           )}
         </div>
         {total !== null && (
           <div className="mt-5 flex flex-col items-center gap-1 text-center">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground sm:text-sm">Birthday Total</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground sm:text-sm">
+              Birthday Total
+            </p>
             <p className="font-display text-3xl sm:text-4xl">{total}</p>
-            {patternLabel && <p className="mt-1 text-xs font-medium text-accent-foreground">{patternLabel}</p>}
-            <p className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground/70">Ramanujan Magic Square · CodeTech</p>
+            {patternLabel && (
+              <p className="mt-1 text-xs font-medium text-accent-foreground">{patternLabel}</p>
+            )}
+            <p className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground/70">
+              Ramanujan Magic Square · CodeTech
+            </p>
           </div>
         )}
       </div>
 
       {/* Info modal */}
       {showInfo && (
-        <div onClick={() => setShowInfo(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4 backdrop-blur-sm">
-          <div onClick={e => e.stopPropagation()}
-            className="relative max-w-md rounded-2xl bg-card p-6 shadow-2xl">
-            <button onClick={() => setShowInfo(false)}
-              className="absolute right-3 top-3 text-muted-foreground hover:text-foreground">✕</button>
+        <div
+          onClick={() => setShowInfo(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4 backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-md rounded-2xl bg-card p-6 shadow-2xl"
+          >
+            <button
+              onClick={() => setShowInfo(false)}
+              className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+            >
+              ✕
+            </button>
             <h2 className="font-display text-2xl">Ramanujan's Magic Square</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Srinivasa Ramanujan's 4×4 magic square, based on his birth date (22-12-1887),
-              is a remarkable construct where rows, columns, diagonals, sub-squares, corners,
-              and many other four-cell patterns all sum to 139 — a small monument to his
-              genius in number theory.
+              Srinivasa Ramanujan's 4×4 magic square, based on his birth date (22-12-1887), is a
+              remarkable construct where rows, columns, diagonals, sub-squares, corners, and many
+              other four-cell patterns all sum to 139 — a small monument to his genius in number
+              theory.
             </p>
           </div>
         </div>

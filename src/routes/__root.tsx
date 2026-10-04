@@ -82,7 +82,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Ramanujan Magic Square — CodeTech" },
-      { name: "description", content: "Generate a personal 4x4 Ramanujan-style magic square from your birthday. By CodeTech, Lead Developer Sachin Sheth." },
+      {
+        name: "description",
+        content:
+          "Generate a personal 4x4 Ramanujan-style magic square from your birthday. By CodeTech, Lead Developer Sachin Sheth.",
+      },
       { name: "author", content: "CodeTech" },
       { name: "theme-color", content: "#1f3a8a" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -92,11 +96,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "application-name", content: "Ramanujan Magic Square" },
       { property: "og:site_name", content: "Ramanujan Magic Square" },
       { property: "og:title", content: "Ramanujan Magic Square — CodeTech" },
-      { property: "og:description", content: "Turn your birthday into a magical 4x4 number square inspired by Srinivasa Ramanujan." },
+      {
+        property: "og:description",
+        content:
+          "Turn your birthday into a magical 4x4 number square inspired by Srinivasa Ramanujan.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Ramanujan Magic Square — CodeTech" },
-      { name: "twitter:description", content: "Generate your personal Ramanujan birthday magic square." },
+      {
+        name: "twitter:description",
+        content: "Generate your personal Ramanujan birthday magic square.",
+      },
     ],
     links: [
       {
@@ -136,7 +147,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  useEffect(() => { registerPWA(); }, []);
+  useEffect(() => {
+    registerPWA();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
