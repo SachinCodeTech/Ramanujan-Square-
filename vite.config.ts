@@ -27,7 +27,12 @@ export default defineConfig({
           globIgnores: ["**/screenshot-*.png"],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
           navigateFallback: "/",
-          navigateFallbackDenylist: [/^\/api\//, /^\/~oauth/, /^\/sitemap\.xml$/, /^\/robots\.txt$/],
+          navigateFallbackDenylist: [
+            /^\/api\//,
+            /^\/~oauth/,
+            /^\/sitemap\.xml$/,
+            /^\/robots\.txt$/,
+          ],
           cleanupOutdatedCaches: true,
           runtimeCaching: [
             {
@@ -40,7 +45,8 @@ export default defineConfig({
               },
             },
             {
-              urlPattern: ({ url, sameOrigin }) => sameOrigin && /\.(?:js|css|woff2|png|svg|ico)$/.test(url.pathname),
+              urlPattern: ({ url, sameOrigin }) =>
+                sameOrigin && /\.(?:js|css|woff2|png|svg|ico)$/.test(url.pathname),
               handler: "CacheFirst",
               options: {
                 cacheName: "static-assets",
