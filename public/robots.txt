@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://apptastic-boost.lovable.app/sitemap.xml
+Sitemap: https://ramanujansquare.lovable.app/sitemap.xml
