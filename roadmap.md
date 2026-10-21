@@ -4,4 +4,5 @@
 - [x] Expand the privacy policy with local processing, browser storage, exports, and offline behavior
 - [x] Add the public version history and store listing pages
 - [x] Add navigation and sitemap entries for the store materials
+- [x] Fix pattern cycling so the highlighted pattern updates correctly
 - [ ] Submit to Google Play and Apple App Store — blocked until the developer accounts, store-console access, signed Android bundle, signing fingerprint, and required support contact details are supplied
