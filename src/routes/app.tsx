@@ -891,7 +891,7 @@ function AppPage() {
             Array.from({ length: 4 }).map((_, j) => {
               const key = `${i}-${j}`;
               const value = square ? square[i][j] : null;
-              const isFirstRow = i === 0 && hasSquare;
+              const isFirstRow = i === 0 && hasSquare && highlight.size === 0;
               const isHi = highlight.has(key);
               return (
                 <div
