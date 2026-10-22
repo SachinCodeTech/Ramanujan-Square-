@@ -51,9 +51,10 @@ export function registerPWA() {
     return;
   }
 
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register(APP_SW_PATH, { scope: "/" }).catch(() => {
-      /* ignore */
-    });
+  // Register immediately rather than on window load: PWABuilder's analyzer and
+  // other audits check for the SW early, and earlier registration only speeds up
+  // offline coverage of the precached shell.
+  navigator.serviceWorker.register(APP_SW_PATH, { scope: "/" }).catch(() => {
+    /* ignore */
   });
 }
