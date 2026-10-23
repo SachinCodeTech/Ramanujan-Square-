@@ -23,6 +23,10 @@ export default defineConfig({
         devOptions: { enabled: false },
         manifest: false,
         workbox: {
+          // Inline the Workbox runtime into sw.js: the separate workbox-*.js
+          // companion chunk is not picked up by the deploy pipeline (404s live),
+          // which makes register() fail and PWABuilder report "no service worker".
+          inlineWorkboxRuntime: true,
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
           globIgnores: ["**/screenshot-*.png"],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
