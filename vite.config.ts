@@ -23,6 +23,9 @@ export default defineConfig({
         devOptions: { enabled: false },
         manifest: false,
         workbox: {
+          // Inline the Workbox runtime into sw.js: the separate workbox-*.js
+          // companion chunk is not picked up by the deploy pipeline (404s live).
+          inlineWorkboxRuntime: true,
           // Precache from the CLIENT output dir only. The default resolves to the
           // nitro build root (dist/), which prefixes every entry with "client/" —
           // those URLs 404 live and poison the precache list.
