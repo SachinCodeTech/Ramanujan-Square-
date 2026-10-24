@@ -33,10 +33,13 @@ export default defineConfig({
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
           globIgnores: ["**/screenshot-*.png"],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-          // No navigateFallback: this is an SSR app with no prebuilt index.html,
-          // so workbox's createHandlerBoundToURL("/") threw at evaluation time and
-          // Chrome rejected the whole worker ("ServiceWorker script evaluation
-          // failed"). Navigations are covered by the NetworkFirst route below.
+          // No navigateFallback: this is an SSR app with no prebuilt index.html.
+          // vite-plugin-pwa silently defaults the fallback to "index.html", which
+          // is never precached here, so workbox's createHandlerBoundToURL throws
+          // at evaluation time and Chrome rejects the whole worker ("ServiceWorker
+          // script evaluation failed"). Navigations are covered by the NetworkFirst
+          // route below instead.
+          navigateFallback: null,
           cleanupOutdatedCaches: true,
           runtimeCaching: [
             {
