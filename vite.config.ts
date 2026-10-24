@@ -23,20 +23,17 @@ export default defineConfig({
         devOptions: { enabled: false },
         manifest: false,
         workbox: {
-          // Inline the Workbox runtime into sw.js: the separate workbox-*.js
-          // companion chunk is not picked up by the deploy pipeline (404s live),
-          // which makes register() fail and PWABuilder report "no service worker".
-          inlineWorkboxRuntime: true,
+          // Precache from the CLIENT output dir only. The default resolves to the
+          // nitro build root (dist/), which prefixes every entry with "client/" —
+          // those URLs 404 live and poison the precache list.
+          globDirectory: "dist/client",
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
           globIgnores: ["**/screenshot-*.png"],
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-          navigateFallback: "/",
-          navigateFallbackDenylist: [
-            /^\/api\//,
-            /^\/~oauth/,
-            /^\/sitemap\.xml$/,
-            /^\/robots\.txt$/,
-          ],
+          // No navigateFallback: this is an SSR app with no prebuilt index.html,
+          // so workbox's createHandlerBoundToURL("/") threw at evaluation time and
+          // Chrome rejected the whole worker ("ServiceWorker script evaluation
+          // failed"). Navigations are covered by the NetworkFirst route below.
           cleanupOutdatedCaches: true,
           runtimeCaching: [
             {
